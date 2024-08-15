@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Core.Carrinho.Enuns;
+using Ecommerce.Core.Frete.Models;
 using Ecommerce.Core.Produto.Models;
 using Ecommerce.Core.Voucher.Enum;
 using Ecommerce.Core.Voucher.Models;
@@ -18,6 +19,7 @@ namespace Ecommerce.Core.Carrinho.Models
         public readonly List<ProdutoCarrinho> _produtoCarrinho; 
         public IReadOnlyCollection<ProdutoCarrinho> ProdutosCarrinho => _produtoCarrinho;
         public decimal  Subtotal { get; private set; }
+        public FreteModel Frete { get; private set; }
 
         public readonly int MAX_QTD_ITENS = 15;
         public CarrinhoModel()
