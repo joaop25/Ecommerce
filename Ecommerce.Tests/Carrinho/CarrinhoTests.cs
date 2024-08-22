@@ -239,7 +239,7 @@ namespace Ecommerce.Tests.Carrinho
             Assert.Throws<Exception>(() => carrinho.AdicionarProduto(produto));
         }
 
-        [Fact(DisplayName = "Atualizar produto com qtd negativa")]
+        [Fact(DisplayName = "Atualizar produto com quantidade negativa")]
         public void AdicionarProduto_AtualizarProdutoQtdNegativa_DeveRetornarExcecao()
         {
             // Arrange
