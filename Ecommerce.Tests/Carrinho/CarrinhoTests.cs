@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Core.Carrinho.Enuns;
 using Ecommerce.Core.Carrinho.Models;
+using Ecommerce.Core.Frete.Enuns;
 using Ecommerce.Core.Produto.Models;
 using Ecommerce.Core.Voucher.Enum;
 using Ecommerce.Core.Voucher.Models;
@@ -213,6 +214,19 @@ namespace Ecommerce.Tests.Carrinho
             Assert.Throws<Exception>(() => carrinho.AplicarVoucher(carrinho, EVoucher.Porcentagem, 0.5m));
         }
 
+
+        [Fact(DisplayName = "Adicionar produto com quantidade superior ao permitido")]
+        public void AdicionarProduto_AdicionarProdutoQtNaoPermitida_DeveRetornarExcecao()
+        {
+            // Arrange
+            var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
+            var guid = Guid.NewGuid();
+            var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 16, 400);
+
+            // Act + Assert
+            Assert.Throws<Exception>(() => carrinho.AdicionarProduto(produto));
+        }
+
         [Fact(DisplayName = "Adicionar produto com qtd negativa")]
         public void AdicionarProduto_AdicionarProdutoQtdNegativa_DeveRetornarExcecao()
         {
@@ -238,6 +252,40 @@ namespace Ecommerce.Tests.Carrinho
 
             // Act + Assert
             Assert.Throws<Exception>(() => carrinho.AtualizarQtdProduto(produtoAtualizado));
+        }
+
+        [Fact(DisplayName = "Aplicar frete normal carrinho")]
+        public void AdicionarFrete_AddFreteNormal_DeveCalcularSubtotalCarrinho()
+        {
+            // Arrange
+            var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
+            var guid = Guid.NewGuid();
+            var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 2, 400);
+            
+
+            // Act 
+            carrinho.AdicionarProduto(produto);
+            carrinho.AdicionarFrete(ref carrinho, ETipoFrete.Normal);
+
+            // Act + Assert
+            Assert.Equal(815, carrinho.Subtotal);
+        }
+
+        [Fact(DisplayName = "Aplicar frete rápido carrinho")]
+        public void AdicionarFrete_AddFreteRapido_DeveCalcularSubtotalCarrinho()
+        {
+            // Arrange
+            var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
+            var guid = Guid.NewGuid();
+            var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 2, 400);
+
+
+            // Act 
+            carrinho.AdicionarProduto(produto);
+            carrinho.AdicionarFrete(ref carrinho, ETipoFrete.Rapido);
+
+            // Act + Assert
+            Assert.Equal(820, carrinho.Subtotal);
         }
     }
 }
