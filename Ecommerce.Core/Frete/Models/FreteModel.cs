@@ -15,20 +15,31 @@ namespace Ecommerce.Core.Frete.Models
 
         public FreteModel()
         {
-
+            TipoFrete = ETipoFrete.Normal;
+            ValorFrete = 0;
         }
-        public void CalcularFrete(FreteModel frete)
+        public FreteModel(ETipoFrete tipoFrete)
         {
-            switch (frete.TipoFrete)
+            TipoFrete = tipoFrete;
+            ValorFrete =CalcularFrete(tipoFrete);
+        }
+
+        public decimal CalcularFrete(ETipoFrete frete)
+        {
+            decimal valorFrete = 0;
+            switch (frete)
             {
                 case ETipoFrete.Normal:
-                    ValorFrete = 15;
+                    valorFrete = 15;
                     break;
                 case ETipoFrete.Rapido:
-                    ValorFrete = 20;
+                    valorFrete = 20;
                     break;
-                default: throw new ArgumentException("Não foi escolhido nenhum frete");
+                default:
+                    valorFrete = 0;
+                    throw new ArgumentException("Não foi escolhido nenhum frete");
             }
+            return valorFrete;
         }
     }
 }

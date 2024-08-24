@@ -9,3 +9,5 @@ C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerc
 C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Core\obj\Debug\net8.0\refint\Ecommerce.Core.dll
 C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Core\obj\Debug\net8.0\Ecommerce.Core.pdb
 C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Core\obj\Debug\net8.0\ref\Ecommerce.Core.dll
+C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Core\obj\Debug\net8.0\Ecommerce.Core.sourcelink.json
+C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Core\obj\Debug\net8.0\Ecommerce.Core.csproj.AssemblyReference.cache

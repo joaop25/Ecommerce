@@ -1,4 +1,6 @@
 ﻿using Ecommerce.Core.Carrinho.Enuns;
+using Ecommerce.Core.DomainObjects;
+using Ecommerce.Core.Frete.Enuns;
 using Ecommerce.Core.Frete.Models;
 using Ecommerce.Core.Produto.Models;
 using Ecommerce.Core.Voucher.Enum;
@@ -15,11 +17,13 @@ namespace Ecommerce.Core.Carrinho.Models
     {
         public Guid ClienteId { get; private set; }
         public ECarrinho StatusCarrinho { get; private set; }
-        public VoucherModel Voucher { get; private set; }
+       
         public readonly List<ProdutoCarrinho> _produtoCarrinho; 
         public IReadOnlyCollection<ProdutoCarrinho> ProdutosCarrinho => _produtoCarrinho;
         public decimal  Subtotal { get; private set; }
         public FreteModel Frete { get; private set; }
+
+        public VoucherModel Voucher { get; private set; }
 
         public readonly int MAX_QTD_ITENS = 15;
         public CarrinhoModel()
@@ -30,13 +34,23 @@ namespace Ecommerce.Core.Carrinho.Models
         public  static CarrinhoModel NovoCarrinhoRascunho(Guid id)
         {
             CarrinhoModel carrinho = new CarrinhoModel();
+            FreteModel freteModel = new FreteModel();
             VoucherModel voucher = new VoucherModel();
+
             carrinho.ClienteId = id;
             carrinho.StatusRascunhoCarrinho();
+            carrinho.Frete = freteModel;
             carrinho.Voucher = voucher;
 
             carrinho.CalcularSubtotal();
             return carrinho;
+        }
+
+        public void AdicionarFrete(ref CarrinhoModel carrinhoModel, ETipoFrete tipoFrete)
+        {
+            FreteModel freteModel = new FreteModel(tipoFrete);
+            carrinhoModel.Frete = freteModel;
+            carrinhoModel.CalcularSubtotal();
         }
 
         public void CalcularSubtotal()
@@ -44,13 +58,14 @@ namespace Ecommerce.Core.Carrinho.Models
             var valorSubtotal = _produtoCarrinho.Sum(x => x.ValorTotal);
             if (Voucher.TipoVoucher == EVoucher.Porcentagem)
             {
-                valorSubtotal -= valorSubtotal * Voucher.Valor;
+                valorSubtotal -= valorSubtotal * Voucher.ValorTipoValor;
             }
             else
             {
-                valorSubtotal -= Voucher.Valor;
+                valorSubtotal -= Voucher.ValorTipoValor;
             }
-            
+
+            valorSubtotal += Frete.ValorFrete;
             Subtotal = valorSubtotal;
         }
         public void StatusRascunhoCarrinho()
@@ -75,7 +90,7 @@ namespace Ecommerce.Core.Carrinho.Models
         public void AtualizarQtdProduto(ProdutoCarrinho item)
         {
             var produto = ProdutosCarrinho.Any(x => x.Id == item.Id);
-            if (!produto) throw new Exception("Produto não existe");
+            if (!produto) throw new DomainException("Produto não existe");
             ValidarRestricoesParaAddProduto(item);
 
             _produtoCarrinho.RemoveAll(x => x.Id == item.Id);
@@ -97,11 +112,11 @@ namespace Ecommerce.Core.Carrinho.Models
         {
             if (item.Quantidade > MAX_QTD_ITENS)
             {
-                throw new Exception($"Somente até {MAX_QTD_ITENS} são permitidas adicionar por item");
+                throw new DomainException($"Somente até {MAX_QTD_ITENS} são permitidas adicionar por item");
             }
             if (item.Quantidade <= 0 )
             {
-                throw new Exception($"Não é permitido adicionar quantidade igual ou inferior a 0");
+                throw new DomainException($"Não é permitido adicionar quantidade igual ou inferior a 0");
             }
         }
         

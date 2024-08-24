@@ -100,3 +100,5 @@ C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerc
 C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Tests\obj\Debug\net8.0\Ecommerce.Tests.pdb
 C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Tests\obj\Debug\net8.0\Ecommerce.Tests.genruntimeconfig.cache
 C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Tests\obj\Debug\net8.0\ref\Ecommerce.Tests.dll
+C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Tests\obj\Debug\net8.0\Ecommerce.Tests.sourcelink.json
+C:\Users\joao.fernandes\Desktop\JOAO MARQUES\codigos\Ecommerce.Solution\Ecommerce.Tests\bin\Debug\net8.0\FluentValidation.dll

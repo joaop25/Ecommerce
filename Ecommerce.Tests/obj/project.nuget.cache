@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ZwpA7ufyveSrnQ1gObExY8oEd3iqkUMWWnQt6kvXFT2YNGyrAsCAw6QQbZRwC+kNBNFy7+SqB7gQ1TXS/n4TmQ==",
+  "dgSpecHash": "VNypLaA/TW54UtoSiBDgfZJBiikG2FdDNtlIk0364Jbodh1YgL20t3sFQxYpdFl1UGpeE0OXWT8G/3RCQ2lIAg==",
   "success": true,
   "projectFilePath": "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\Ecommerce.Solution\\Ecommerce.Tests\\Ecommerce.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joao.fernandes\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
+    "C:\\Users\\joao.fernandes\\.nuget\\packages\\fluentvalidation\\11.9.2\\fluentvalidation.11.9.2.nupkg.sha512",
     "C:\\Users\\joao.fernandes\\.nuget\\packages\\microsoft.codecoverage\\17.6.0\\microsoft.codecoverage.17.6.0.nupkg.sha512",
     "C:\\Users\\joao.fernandes\\.nuget\\packages\\microsoft.net.test.sdk\\17.6.0\\microsoft.net.test.sdk.17.6.0.nupkg.sha512",
     "C:\\Users\\joao.fernandes\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",

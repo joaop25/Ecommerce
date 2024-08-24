@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "PvrVW/XIoSri7wGvQNREIvfewmHgxvdBrwxm7u92WCNJr/IZQFEfM0To0IsRqupZ/JGQj2VI6l9bsT3xemdWTg==",
+  "dgSpecHash": "Khhaz7BAXJrHWW6THcB1AFBschVJ79W6smoXOlEl7cHAwRTjdw5i0BEB+tVtM+OqlgRmUbCp7zQOowo/F7qSFg==",
   "success": true,
   "projectFilePath": "C:\\Users\\joao.fernandes\\Desktop\\JOAO MARQUES\\codigos\\Ecommerce.Solution\\Ecommerce.Core\\Ecommerce.Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\joao.fernandes\\.nuget\\packages\\fluentvalidation\\11.9.2\\fluentvalidation.11.9.2.nupkg.sha512"
+  ],
   "logs": []
 }
