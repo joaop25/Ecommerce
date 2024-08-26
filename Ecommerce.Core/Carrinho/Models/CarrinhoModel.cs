@@ -5,6 +5,7 @@ using Ecommerce.Core.Frete.Models;
 using Ecommerce.Core.Produto.Models;
 using Ecommerce.Core.Voucher.Enum;
 using Ecommerce.Core.Voucher.Models;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace Ecommerce.Core.Carrinho.Models
         public decimal  Subtotal { get; private set; }
         public FreteModel Frete { get; private set; }
 
+        public bool VoucherUtilizado { get; private set; }
         public VoucherModel Voucher { get; private set; }
 
         public readonly int MAX_QTD_ITENS = 15;
@@ -35,12 +37,11 @@ namespace Ecommerce.Core.Carrinho.Models
         {
             CarrinhoModel carrinho = new CarrinhoModel();
             FreteModel freteModel = new FreteModel();
-            VoucherModel voucher = new VoucherModel();
 
             carrinho.ClienteId = id;
             carrinho.StatusRascunhoCarrinho();
             carrinho.Frete = freteModel;
-            carrinho.Voucher = voucher;
+
 
             carrinho.CalcularSubtotal();
             return carrinho;
@@ -56,13 +57,16 @@ namespace Ecommerce.Core.Carrinho.Models
         public void CalcularSubtotal()
         {
             var valorSubtotal = _produtoCarrinho.Sum(x => x.ValorTotal);
-            if (Voucher.TipoVoucher == EVoucher.Porcentagem)
+            if (VoucherUtilizado)
             {
-                valorSubtotal -= valorSubtotal * Voucher.ValorTipoValor;
-            }
-            else
-            {
-                valorSubtotal -= Voucher.ValorTipoValor;
+                if (Voucher.TipoVoucher == EVoucher.Porcentagem)
+                {
+                    valorSubtotal -= valorSubtotal * Voucher.ValorPercentual;
+                }
+                else
+                {
+                    valorSubtotal -= Voucher.ValorTipoValor;
+                }
             }
 
             valorSubtotal += Frete.ValorFrete;
@@ -102,10 +106,15 @@ namespace Ecommerce.Core.Carrinho.Models
             }
         }
 
-        public void AplicarVoucher(CarrinhoModel carrinho, EVoucher voucher, decimal valorVoucher)
+        public ValidationResult AplicarVoucher(VoucherModel voucher)
         {
-            VoucherModel.AplicarVoucher(carrinho, voucher, valorVoucher);
+            if (ProdutosCarrinho.Count == 0) throw  new DomainException("Item não adicionado");
+            var voucherValido = voucher.ValidarSeAplicavelVoucher();
+            if (!voucherValido.IsValid) return voucherValido;
+            VoucherUtilizado = true;
+            Voucher = voucher;
             CalcularSubtotal();
+            return voucherValido;
         }
 
         public void ValidarRestricoesParaAddProduto(ProdutoCarrinho item)

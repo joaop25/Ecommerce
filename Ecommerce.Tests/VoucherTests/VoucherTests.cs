@@ -2,6 +2,7 @@
 using Ecommerce.Core.DomainObjects;
 using Ecommerce.Core.Produto.Models;
 using Ecommerce.Core.Voucher.Enum;
+using Ecommerce.Core.Voucher.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,58 @@ namespace Ecommerce.Tests.VoucherTests
 {
     public class VoucherTests
     {
+        [Fact(DisplayName = "Aplicar Voucher inativo")]
+        public void AdicionarVoucher_AddVoucherInativo_DeverRetornarExcecao()
+        {
+            // Arrange + Act + Assert
+            var voucher = new VoucherModel("JOAO10DESC",false,1,DateTime.Now,0,10,EVoucher.Valor, true);
+
+            // Act
+            var result = voucher.ValidarSeAplicavelVoucher();
+
+            // Assert 
+            Assert.False(result.IsValid);
+            Assert.Contains(VoucherAplicavelValidation.VoucherAtivoMsg, result.Errors.Select(c => c.ErrorMessage));
+
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher com ID inválido")]
+        public void AdicionarVoucher_AddVoucherIdInvalido_DeverRetornarExcecao()
+        {
+            // Arrange + Act + Assert
+            var voucher = new VoucherModel("", true, 1, DateTime.Now, 0, 10, EVoucher.Valor, true);
+
+            // Act
+            var result = voucher.ValidarSeAplicavelVoucher();
+
+            // Assert 
+            Assert.False(result.IsValid);
+            Assert.Contains(VoucherAplicavelValidation.IdErroMsg, result.Errors.Select(c => c.ErrorMessage));
+
+
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher expirado")]
+        public void AdicionarVoucher_AddVoucherExpirado_DeverRetornarExcecao()
+        {
+            // Arrange + Act + Assert
+            var voucher = new VoucherModel("", true, 1, DateTime.Now.AddDays(-1), 0, 10, EVoucher.Valor, false);
+
+            // Act
+            var result = voucher.ValidarSeAplicavelVoucher();
+
+            // Assert 
+            Assert.False(result.IsValid);
+            Assert.Equal(2, result.Errors.Count());
+            Assert.Contains(VoucherAplicavelValidation.DataValidadeMsg, result.Errors.Select(c => c.ErrorMessage));
+            Assert.Contains(VoucherAplicavelValidation.IdErroMsg, result.Errors.Select(c => c.ErrorMessage));
+
+
+        }
+
+
+
+
         [Fact(DisplayName = "Aplicar Voucher Valor carrinho ")]
         public void AdicionarProduto_AddVoucherValor_SubtotalDeveSerCalculadoCorretamente()
         {
@@ -19,13 +72,18 @@ namespace Ecommerce.Tests.VoucherTests
             var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
             var guid = Guid.NewGuid();
             var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 2, 400);
+            var voucher = new VoucherModel("JOAO10DESC", true, 1, DateTime.Now, 0, 100, EVoucher.Valor, false);
+
+
 
             // Act
             carrinho.AdicionarProduto(produto);
-            carrinho.AplicarVoucher(carrinho, EVoucher.Valor, 100);
+            var result = carrinho.AplicarVoucher(voucher);
 
             // Assert
             Assert.Equal(700, carrinho.Subtotal);
+            Assert.Equal(0, result.Errors.Count());
+
         }
 
         [Fact(DisplayName = "Aplicar Voucher Porcentagem carrinho ")]
@@ -35,13 +93,16 @@ namespace Ecommerce.Tests.VoucherTests
             var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
             var guid = Guid.NewGuid();
             var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 2, 400);
+            var voucher = new VoucherModel("JOAO10DESC", true, 1, DateTime.Now, 0.50m,0, EVoucher.Porcentagem, false);
+
 
             // Act
             carrinho.AdicionarProduto(produto);
-            carrinho.AplicarVoucher(carrinho, EVoucher.Porcentagem, 0.5m);
+            var result = carrinho.AplicarVoucher(voucher);
 
             // Assert
             Assert.Equal(400, carrinho.Subtotal);
+            Assert.Equal(0, result.Errors.Count());
         }
 
         [Fact(DisplayName = "Remover Voucher Valor carrinho ")]
@@ -51,12 +112,14 @@ namespace Ecommerce.Tests.VoucherTests
             var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
             var guid = Guid.NewGuid();
             var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 2, 400);
+            var voucher = new VoucherModel("", true, 1, DateTime.Now.AddDays(-1), 0, 10, EVoucher.Valor, false);
+
 
 
             // Act
             carrinho.AdicionarProduto(produto);
-            carrinho.AplicarVoucher(carrinho, EVoucher.Porcentagem, 0.5m);
-            carrinho.AplicarVoucher(carrinho, EVoucher.Nenhum, 0);
+            carrinho.AplicarVoucher(voucher);
+            carrinho.AplicarVoucher(voucher);
 
             // Assert
             Assert.Equal(800, carrinho.Subtotal);
@@ -69,9 +132,12 @@ namespace Ecommerce.Tests.VoucherTests
             var carrinho = CarrinhoModel.NovoCarrinhoRascunho(Guid.NewGuid());
             var guid = Guid.NewGuid();
             var produto = new ProdutoCarrinho(guid, "Tenis Nike", "Tenis Nike AirForce", 2, 400);
+            var voucher = new VoucherModel("", true, 1, DateTime.Now.AddDays(-1), 0, 10, EVoucher.Valor, false);
+
+
 
             // Act + Assert
-            Assert.Throws<DomainException>(() => carrinho.AplicarVoucher(carrinho, EVoucher.Porcentagem, 0.5m));
+            Assert.Throws<DomainException>(() => carrinho.AplicarVoucher(voucher));
         }
 
     }

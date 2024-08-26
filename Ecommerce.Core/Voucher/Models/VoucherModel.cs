@@ -16,7 +16,7 @@ namespace Ecommerce.Core.Voucher.Models
 {
     public class VoucherModel
     {
-        public Guid Id { get; private set; }
+        public string Id { get; private set; }
         public bool Ativo { get; private set; }
         public int Quantidade { get; private set; }
         public DateTime DataValidade { get; private set; }
@@ -25,7 +25,7 @@ namespace Ecommerce.Core.Voucher.Models
         public EVoucher TipoVoucher { get; private set; }
         public bool Utilizado { get; private set; }
 
-        public VoucherModel(Guid id, bool ativo, int quantidade, DateTime dataValidade, decimal valorPercentual, decimal valorTipoValor, EVoucher tipoVoucher, bool utilizado)
+        public VoucherModel(string id, bool ativo, int quantidade, DateTime dataValidade, decimal valorPercentual, decimal valorTipoValor, EVoucher tipoVoucher, bool utilizado)
         {
             Id = id;
             Ativo = ativo;
@@ -35,7 +35,6 @@ namespace Ecommerce.Core.Voucher.Models
             ValorTipoValor = valorTipoValor;
             TipoVoucher = tipoVoucher;
             Utilizado = utilizado;
-            ValidarSeAplicavelVoucher();
         }
 
         public VoucherModel() { }
@@ -107,7 +106,7 @@ namespace Ecommerce.Core.Voucher.Models
 
         protected static bool DataVencimentoSuperiorAtual(DateTime dataValidade)
         {
-            return dataValidade >= DateTime.Now;
+            return dataValidade >= DateTime.Now.AddHours(-1);
         }
 
     }
